@@ -2,53 +2,21 @@ package app
 
 import (
 	"encoding/json"
-	"fmt"
-	"github.com/gorilla/mux"
+	"github.com/dsych/banking/service"
 	"net/http"
-	"time"
 )
 
-type Customer struct {
-	Name string `json:"name"`
-	City string `json:"city"`
+type CustomerHandlers struct {
+	service service.CustomerService
 }
 
-type TimeResponse struct {
-	CurrentTime string `json:"current_time"`
-}
-
-func greet(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello world")
-}
-
-func getAllCustomers(w http.ResponseWriter, r *http.Request) {
-	customers := []Customer{
-		{Name: "Marko", City: "Dodo"},
-		{Name: "Donald", City: "Dodo"},
-	}
-
-	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(customers)
-}
-
-func getTime(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	loc, err := time.LoadLocation(vars["time_zone"])
-	dt := time.Now()
+func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
+	customers, err := ch.service.GetAllCustomers()
 
 	if err != nil {
-		fmt.Fprint(w, dt.Format(time.RFC1123))
+		w.WriteHeader(404)
 		return
 	}
-
-	fmt.Fprint(w, dt.In(loc).Format(time.RFC1123))
-}
-
-func createCustomer(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Post request received...")
-}
-
-func getCustomer(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	fmt.Fprint(w, vars["customer_id"])
+	w.Header().Add("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(customers)
 }
