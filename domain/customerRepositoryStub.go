@@ -12,12 +12,12 @@ func (s CustomerRepositoryStub) FindAll() ([]Customer, error) {
 func NewCustomerRepositoryStub() CustomerRepository {
 	customers := []Customer{
 		{
-			Id:      "1",
-			Name:    "Marko",
-			City:    "Dodo",
-			Zipcode: "123",
-			Birth:   "12-12-1992",
-			Status:  "active",
+			Id:          "1",
+			Name:        "Marko",
+			City:        "Dodo",
+			Zipcode:     "123",
+			DateOfBirth: "12-12-1992",
+			Status:      "active",
 		},
 	}
 	return CustomerRepositoryStub{customers}
