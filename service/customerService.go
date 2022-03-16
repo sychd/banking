@@ -1,18 +1,26 @@
 package service
 
-import "github.com/dsych/banking/domain"
+import (
+	"github.com/dsych/banking/domain"
+	"github.com/dsych/banking/errs"
+)
 
 // CustomerService Port
 type CustomerService interface {
-	GetAllCustomers() ([]domain.Customer, error)
+	GetAllCustomers() ([]domain.Customer, *errs.AppError)
+	GetCustomer(string) (*domain.Customer, *errs.AppError)
 }
 
 type DefaultCustomerService struct {
 	repository domain.CustomerRepository // it is a dependency, not concrete implementation
 }
 
-func (s DefaultCustomerService) GetAllCustomers() ([]domain.Customer, error) {
+func (s DefaultCustomerService) GetAllCustomers() ([]domain.Customer, *errs.AppError) {
 	return s.repository.FindAll()
+}
+
+func (s DefaultCustomerService) GetCustomer(id string) (*domain.Customer, *errs.AppError) {
+	return s.repository.ById(id)
 }
 
 // NewCustomerService Helper function to instantiate this service.
