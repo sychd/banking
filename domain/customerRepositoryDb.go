@@ -5,6 +5,7 @@ import (
 	"github.com/dsych/banking/errs"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -12,10 +13,16 @@ type CustomerRepositoryDb struct {
 	client *sql.DB
 }
 
-func (db CustomerRepositoryDb) FindAll() ([]Customer, *errs.AppError) {
+func (db CustomerRepositoryDb) FindAll(status string) ([]Customer, *errs.AppError) {
 	findAllSql := "select customer_id, name, city, zipcode, date_of_birth, status from customers"
+	var args []interface{}
 
-	rows, err := db.client.Query(findAllSql)
+	if status == "active" || status == "inactive" {
+		findAllSql = strings.Join([]string{findAllSql, " where status = ?"}, "")
+		args = append(args, CustomerStatusDict[status])
+	}
+
+	rows, err := db.client.Query(findAllSql, args...)
 
 	if err != nil {
 		log.Println("Error while querying customer table" + err.Error())

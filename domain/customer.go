@@ -11,8 +11,13 @@ type Customer struct {
 	Status      string
 }
 
+var CustomerStatusDict = map[string]string{
+	"inactive": "0",
+	"active":   "1",
+}
+
 // CustomerRepository Interface (port)
 type CustomerRepository interface {
-	FindAll() ([]Customer, *errs.AppError)
+	FindAll(status string) ([]Customer, *errs.AppError)
 	ById(string) (*Customer, *errs.AppError)
 }

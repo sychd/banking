@@ -12,10 +12,12 @@ type CustomerHandlers struct {
 }
 
 func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
-	customers, err := ch.service.GetAllCustomers()
+	vars := mux.Vars(r)
+	status := vars["status"]
+	customers, err := ch.service.GetAllCustomers(status)
 
 	if err != nil {
-		writeResponse(w, http.StatusInternalServerError, err.AsMessage())
+		writeResponse(w, err.Code, err.AsMessage())
 	} else {
 		writeResponse(w, http.StatusOK, customers)
 	}
