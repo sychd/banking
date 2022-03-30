@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 	"github.com/dsych/banking/domain"
+	"github.com/dsych/banking/logger"
 	"github.com/dsych/banking/service"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
@@ -30,7 +31,7 @@ func Start() {
 
 	// starting server
 	address := fmt.Sprintf("%s:%s", os.Getenv("SERVER_ADDRESS"), os.Getenv("SERVER_PORT"))
-	fmt.Printf("Server started at %s\n", address)
+	logger.Infof("Server started at %s", address)
 	err = http.ListenAndServe(address, router)
 
 	if err != nil {
