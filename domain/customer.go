@@ -1,6 +1,9 @@
 package domain
 
-import "github.com/dsych/banking/errs"
+import (
+	dto "github.com/dsych/banking/dto/customer"
+	"github.com/dsych/banking/errs"
+)
 
 type Customer struct {
 	Id          string `db:"customer_id"`
@@ -20,4 +23,19 @@ var CustomerStatusDict = map[string]string{
 type CustomerRepository interface {
 	FindAll(status string) ([]Customer, *errs.AppError)
 	ById(string) (*Customer, *errs.AppError)
+}
+
+func (c Customer) statusAsText() string {
+	for k, v := range CustomerStatusDict {
+		if v == c.Status {
+			return k
+		}
+	}
+	return "unknown"
+}
+
+func (c Customer) ToDTO() *dto.CustomerResponse {
+	return &dto.CustomerResponse{
+		Id: c.Id, Name: c.Name, City: c.City, Zipcode: c.Zipcode, DateOfBirth: c.DateOfBirth, Status: c.statusAsText(),
+	}
 }

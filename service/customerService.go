@@ -2,13 +2,14 @@ package service
 
 import (
 	"github.com/dsych/banking/domain"
+	"github.com/dsych/banking/dto/customer"
 	"github.com/dsych/banking/errs"
 )
 
 // CustomerService Port
 type CustomerService interface {
 	GetAllCustomers(string) ([]domain.Customer, *errs.AppError)
-	GetCustomer(string) (*domain.Customer, *errs.AppError)
+	GetCustomer(string) (*dto.CustomerResponse, *errs.AppError)
 }
 
 type DefaultCustomerService struct {
@@ -19,8 +20,13 @@ func (s DefaultCustomerService) GetAllCustomers(status string) ([]domain.Custome
 	return s.repository.FindAll(status)
 }
 
-func (s DefaultCustomerService) GetCustomer(id string) (*domain.Customer, *errs.AppError) {
-	return s.repository.ById(id)
+func (s DefaultCustomerService) GetCustomer(id string) (*dto.CustomerResponse, *errs.AppError) {
+	c, err := s.repository.ById(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.ToDTO(), nil
 }
 
 // NewCustomerService Helper function to instantiate this service.
