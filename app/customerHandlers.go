@@ -35,6 +35,7 @@ func (ch *CustomerHandlers) getCustomer(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
+// TODO -- extract to shared file
 func writeResponse(w http.ResponseWriter, code int, data interface{}) {
 	w.Header().Add("Content-Type", "application/json") // header must be always set first to be applied
 	w.WriteHeader(code)

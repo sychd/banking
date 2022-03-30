@@ -6,12 +6,26 @@ import (
 	"github.com/dsych/banking/logger"
 	"github.com/dsych/banking/service"
 	"github.com/gorilla/mux"
+	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
+func createDbClient(dbUrl string) *sqlx.DB {
+	client, err := sqlx.Open("mysql", dbUrl)
+	if err != nil {
+		panic(err)
+	}
+
+	client.SetConnMaxLifetime(time.Minute * 3)
+	client.SetMaxOpenConns(10)
+	client.SetMaxIdleConns(10)
+
+	return client
+}
 func Start() {
 	err := godotenv.Load("local.env")
 	if err != nil {
@@ -20,14 +34,17 @@ func Start() {
 	}
 
 	router := mux.NewRouter()
+	dbClient := createDbClient(os.Getenv("CLEARDB_DATABASE_URL"))
 
 	//wiring
-	ch := CustomerHandlers{service.NewCustomerService(domain.NewCustomerRepositoryDb(os.Getenv("CLEARDB_DATABASE_URL")))}
+	ch := CustomerHandlers{service.NewCustomerService(domain.NewCustomerRepositoryDb(dbClient))}
+	ah := AccountHandlers{service.NewAccountService(domain.NewAccountRepositoryDb(dbClient))}
 
 	// define routes
 	router.HandleFunc("/customers", ch.getAllCustomers).Methods(http.MethodGet)
 	router.HandleFunc("/customers", ch.getAllCustomers).Queries("status", "{status:active|inactive}").Methods(http.MethodGet)
 	router.HandleFunc("/customers/{customer_id:[0-9]+}", ch.getCustomer).Methods(http.MethodGet)
+	router.HandleFunc("/customers/{customer_id:[0-9]+}/account", ah.newAccount).Methods(http.MethodPost)
 
 	// starting server
 	address := fmt.Sprintf("%s:%s", os.Getenv("SERVER_ADDRESS"), os.Getenv("SERVER_PORT"))
