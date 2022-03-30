@@ -5,12 +5,13 @@ import (
 	"github.com/dsych/banking/errs"
 	"github.com/dsych/banking/logger"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 	"strings"
 	"time"
 )
 
 type CustomerRepositoryDb struct {
-	client *sql.DB
+	client *sqlx.DB
 }
 
 func (db CustomerRepositoryDb) FindAll(status string) ([]Customer, *errs.AppError) {
@@ -22,24 +23,12 @@ func (db CustomerRepositoryDb) FindAll(status string) ([]Customer, *errs.AppErro
 		args = append(args, CustomerStatusDict[status])
 	}
 
-	rows, err := db.client.Query(findAllSql, args...)
+	customers := make([]Customer, 0)
+	err := db.client.Select(&customers, findAllSql, args...)
 
 	if err != nil {
-		logger.Error("Error while querying customer table" + err.Error())
+		logger.Error("Error while querying customer table, " + err.Error())
 		return nil, errs.NewUnexpectedError("Error while querying customer table")
-	}
-
-	customers := make([]Customer, 0)
-
-	for rows.Next() {
-		var c Customer
-		err := rows.Scan(&c.Id, &c.Name, &c.City, &c.Zipcode, &c.DateOfBirth, &c.Status)
-
-		if err != nil {
-			logger.Error("Error while scanning customers" + err.Error())
-			return nil, errs.NewUnexpectedError("Error while querying customer customers")
-		}
-		customers = append(customers, c)
 	}
 
 	return customers, nil
@@ -47,9 +36,8 @@ func (db CustomerRepositoryDb) FindAll(status string) ([]Customer, *errs.AppErro
 
 func (db CustomerRepositoryDb) ById(id string) (*Customer, *errs.AppError) {
 	customerSql := "select customer_id, name, city, zipcode, date_of_birth, status from customers where customer_id = ?"
-	row := db.client.QueryRow(customerSql, id)
 	var c Customer
-	err := row.Scan(&c.Id, &c.Name, &c.City, &c.Zipcode, &c.DateOfBirth, &c.Status)
+	err := db.client.Get(&c, customerSql, id)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -64,7 +52,7 @@ func (db CustomerRepositoryDb) ById(id string) (*Customer, *errs.AppError) {
 }
 
 func NewCustomerRepositoryDb(dbUrl string) CustomerRepositoryDb {
-	client, err := sql.Open("mysql", dbUrl)
+	client, err := sqlx.Open("mysql", dbUrl)
 	if err != nil {
 		panic(err)
 	}
