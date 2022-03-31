@@ -30,3 +30,23 @@ func (h *AccountHandlers) newAccount(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
+func (h *AccountHandlers) makeTransaction(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	var request dto.TransactionRequest
+	err := json.NewDecoder(r.Body).Decode(&request)
+
+	if err != nil {
+		writeResponse(w, http.StatusBadRequest, err.Error())
+	} else {
+		request.CustomerId = vars["customer_id"]
+		request.AccountId = vars["account_id"]
+		account, err := h.service.MakeTransaction(&request)
+
+		if err != nil {
+			writeResponse(w, err.Code, err.AsMessage())
+		} else {
+			writeResponse(w, http.StatusCreated, account)
+		}
+	}
+}
