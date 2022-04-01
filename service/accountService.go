@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/dsych/banking/domain"
-	dto "github.com/dsych/banking/dto/account"
-	"github.com/dsych/banking/errs"
+	"github.com/sychd/banking/domain"
+	dto "github.com/sychd/banking/dto/account"
+	"github.com/sychd/banking/errs"
 	"time"
 )
 

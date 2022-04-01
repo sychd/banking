@@ -2,9 +2,9 @@ package domain
 
 import (
 	"database/sql"
-	"github.com/dsych/banking/errs"
-	"github.com/dsych/banking/logger"
 	"github.com/jmoiron/sqlx"
+	"github.com/sychd/banking/errs"
+	"github.com/sychd/banking/logger"
 	"strconv"
 )
 

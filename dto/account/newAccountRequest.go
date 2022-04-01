@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"github.com/dsych/banking/errs"
+	"github.com/sychd/banking/errs"
 	"strings"
 )
 

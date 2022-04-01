@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/dsych/banking/domain"
-	"github.com/dsych/banking/dto/customer"
-	"github.com/dsych/banking/errs"
+	"github.com/sychd/banking/domain"
+	"github.com/sychd/banking/dto/customer"
+	"github.com/sychd/banking/errs"
 )
 
 // CustomerService Port

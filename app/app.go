@@ -2,12 +2,12 @@ package app
 
 import (
 	"fmt"
-	"github.com/dsych/banking/domain"
-	"github.com/dsych/banking/logger"
-	"github.com/dsych/banking/service"
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
+	"github.com/sychd/banking/domain"
+	"github.com/sychd/banking/logger"
+	"github.com/sychd/banking/service"
 	"log"
 	"net/http"
 	"os"

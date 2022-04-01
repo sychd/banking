@@ -2,10 +2,10 @@ package domain
 
 import (
 	"database/sql"
-	"github.com/dsych/banking/errs"
-	"github.com/dsych/banking/logger"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
+	"github.com/sychd/banking/errs"
+	"github.com/sychd/banking/logger"
 	"strings"
 )
 

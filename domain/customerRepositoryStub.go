@@ -1,6 +1,6 @@
 package domain
 
-import "github.com/dsych/banking/errs"
+import "github.com/sychd/banking/errs"
 
 // CustomerRepositoryStub adaptor
 type CustomerRepositoryStub struct {

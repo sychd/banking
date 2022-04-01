@@ -2,9 +2,9 @@ package app
 
 import (
 	"encoding/json"
-	dto "github.com/dsych/banking/dto/account"
-	"github.com/dsych/banking/service"
 	"github.com/gorilla/mux"
+	dto "github.com/sychd/banking/dto/account"
+	"github.com/sychd/banking/service"
 	"net/http"
 )
 

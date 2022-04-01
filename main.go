@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/dsych/banking/app"
+	"github.com/sychd/banking/app"
 )
 
 func main() {

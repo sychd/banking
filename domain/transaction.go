@@ -1,8 +1,8 @@
 package domain
 
 import (
-	"github.com/dsych/banking/dto/account"
-	"github.com/dsych/banking/errs"
+	"github.com/sychd/banking/dto/account"
+	"github.com/sychd/banking/errs"
 )
 
 type Transaction struct {

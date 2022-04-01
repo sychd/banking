@@ -1,4 +1,4 @@
-module github.com/dsych/banking
+module github.com/sychd/banking
 
 go 1.17
 

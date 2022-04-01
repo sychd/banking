@@ -2,8 +2,8 @@ package app
 
 import (
 	"encoding/json"
-	"github.com/dsych/banking/service"
 	"github.com/gorilla/mux"
+	"github.com/sychd/banking/service"
 	"net/http"
 )
 
