@@ -3,6 +3,7 @@ package domain
 import (
 	dto "github.com/sychd/banking/dto/account"
 	"github.com/sychd/banking/errs"
+	"time"
 )
 
 type Account struct {
@@ -14,8 +15,8 @@ type Account struct {
 	Status      string  `db:"status"`
 }
 
-func (a Account) ToNewAccountResponseDto() dto.NewAccountResponse {
-	return dto.NewAccountResponse{AccountId: a.AccountId}
+func (a Account) ToNewAccountResponseDto() *dto.NewAccountResponse {
+	return &dto.NewAccountResponse{AccountId: a.AccountId}
 }
 
 func (a Account) ToAccountResponseDto() dto.AccountResponse {
@@ -33,6 +34,18 @@ func (a Account) CanWithdraw(amount float64) bool {
 	return a.Amount >= amount
 }
 
+func NewAccount(customerId, accountType string, amount float64) Account {
+	return Account{
+		AccountId:   "",
+		CustomerId:  customerId,
+		OpeningDate: time.Now().Format("2006-01-02 15:04:05"),
+		AccountType: accountType,
+		Amount:      amount,
+		Status:      "1",
+	}
+}
+
+//go:generate mockgen -destination=../mocks/domain/mockAccountRepository.go -package domain github.com/sychd/banking/domain AccountRepository
 type AccountRepository interface {
 	Save(request Account) (*Account, *errs.AppError)
 	SaveTransaction(t Transaction) (*Transaction, *errs.AppError)

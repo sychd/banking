@@ -63,28 +63,16 @@ func (s DefaultAccountService) MakeTransaction(req *dto.TransactionRequest) (*dt
 }
 
 func (s DefaultAccountService) NewAccount(req *dto.NewAccountRequest) (*dto.NewAccountResponse, *errs.AppError) {
-	err := req.Validate()
-	if err != nil {
+	if err := req.Validate(); err != nil {
 		return nil, err
 	}
 
-	a := domain.Account{
-		AccountId:   "",
-		CustomerId:  req.CustomerId,
-		OpeningDate: time.Now().Format("2006-01-02 15:04:05"),
-		AccountType: req.AccountType,
-		Amount:      req.Amount,
-		Status:      "1",
-	}
-	newAccount, err := s.repository.Save(a)
-
-	if err != nil {
+	a := domain.NewAccount(req.CustomerId, req.AccountType, req.Amount)
+	if newAccount, err := s.repository.Save(a); err != nil {
 		return nil, err
+	} else {
+		return newAccount.ToNewAccountResponseDto(), nil
 	}
-
-	res := newAccount.ToNewAccountResponseDto()
-
-	return &res, nil
 }
 
 // NewAccountService Helper function to instantiate this service.
