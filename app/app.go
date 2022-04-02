@@ -2,12 +2,12 @@ package app
 
 import (
 	"fmt"
+	"github.com/ashishjuyal/banking-lib/logger"
 	_ "github.com/golang/mock/mockgen/model"
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"github.com/sychd/banking/domain"
-	"github.com/sychd/banking/logger"
 	"github.com/sychd/banking/service"
 	"log"
 	"net/http"
@@ -53,7 +53,7 @@ func Start() {
 
 	// starting server
 	address := fmt.Sprintf("%s:%s", os.Getenv("SERVER_ADDRESS"), os.Getenv("SERVER_PORT"))
-	logger.Infof("Server started at %s", address)
+	logger.Info("Server started at " + address)
 	err = http.ListenAndServe(address, router)
 
 	if err != nil {

@@ -7,9 +7,9 @@ package service
 import (
 	reflect "reflect"
 
+	errs "github.com/ashishjuyal/banking-lib/errs"
 	gomock "github.com/golang/mock/gomock"
 	dto "github.com/sychd/banking/dto/customer"
-	errs "github.com/sychd/banking/errs"
 )
 
 // MockCustomerService is a mock of CustomerService interface.

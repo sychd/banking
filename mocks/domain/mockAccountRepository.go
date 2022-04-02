@@ -7,9 +7,9 @@ package domain
 import (
 	reflect "reflect"
 
+	errs "github.com/ashishjuyal/banking-lib/errs"
 	gomock "github.com/golang/mock/gomock"
 	domain "github.com/sychd/banking/domain"
-	errs "github.com/sychd/banking/errs"
 )
 
 // MockAccountRepository is a mock of AccountRepository interface.

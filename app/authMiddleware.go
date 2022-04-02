@@ -1,9 +1,9 @@
 package app
 
 import (
+	"github.com/ashishjuyal/banking-lib/errs"
 	"github.com/gorilla/mux"
 	"github.com/sychd/banking/domain"
-	"github.com/sychd/banking/errs"
 	"net/http"
 	"strings"
 )
