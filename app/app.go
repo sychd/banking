@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	_ "github.com/golang/mock/mockgen/model"
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"

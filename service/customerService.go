@@ -7,8 +7,9 @@ import (
 )
 
 // CustomerService Port
+//go:generate mockgen -destination=../mocks/service/mockCustomerService.go -package service github.com/sychd/banking/service CustomerService
 type CustomerService interface {
-	GetAllCustomers(string) ([]domain.Customer, *errs.AppError)
+	GetAllCustomers(string) ([]dto.CustomerResponse, *errs.AppError)
 	GetCustomer(string) (*dto.CustomerResponse, *errs.AppError)
 }
 
@@ -16,8 +17,18 @@ type DefaultCustomerService struct {
 	repository domain.CustomerRepository // it is a dependency, not concrete implementation
 }
 
-func (s DefaultCustomerService) GetAllCustomers(status string) ([]domain.Customer, *errs.AppError) {
-	return s.repository.FindAll(status)
+func (s DefaultCustomerService) GetAllCustomers(status string) ([]dto.CustomerResponse, *errs.AppError) {
+	customers, appErr := s.repository.FindAll(status)
+	if appErr != nil {
+		return nil, appErr
+	}
+
+	dtos := make([]dto.CustomerResponse, len(customers))
+	for i, value := range customers {
+		dtos[i] = *value.ToDTO()
+	}
+
+	return dtos, nil
 }
 
 func (s DefaultCustomerService) GetCustomer(id string) (*dto.CustomerResponse, *errs.AppError) {
